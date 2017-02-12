@@ -9,30 +9,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
     private static final String TAG = "ZoomSurfaceView";
-    private ZoomSurfaceView surfaceView;
+    private CustomSurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
 
+    private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_main);
-        surfaceView = (ZoomSurfaceView) findViewById(R.id.zoom_surface_view);
+        surfaceView = (CustomSurfaceView) findViewById(R.id.zoom_surface_view);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
-        surfaceHolder.setFixedSize(100, 100);
+        surfaceHolder.setFixedSize(800, 800);
+
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "surfaceCreated");
-        Canvas canvas = holder.lockCanvas();
-        draw(canvas);
-        holder.unlockCanvasAndPost(canvas);
+        draw(holder);
     }
 
     @Override
@@ -45,16 +46,47 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         Log.d(TAG, "surfaceDestroyed");
     }
 
-    private void draw(Canvas canvas){
+    private void draw(SurfaceHolder holder){
         Log.d(TAG, "draw");
 
         Paint p = new Paint();
         p.setColor(Color.BLUE);
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.test);
-        Log.d(TAG, "draw, bmp w = "+bmp.getWidth()+", h = "+bmp.getHeight());
+        if (bitmap == null) {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+        }
+        Log.d(TAG, "draw, bmp w = "+bitmap.getWidth()+", h = "+bitmap.getHeight());
+        Canvas canvas = holder.lockCanvas();
 
-        canvas.drawBitmap(bmp, 0, 0, p);
+        canvas.drawBitmap(bitmap, 0, 0, p);
 //        canvas.drawLine(0, 0, 100, 100, p);
-        bmp.recycle();
+        holder.unlockCanvasAndPost(canvas);
+
     }
+
+    int w = 200;
+    int h = 200;
+
+    public void onZoomInClicked(View view) {
+        w += 50;
+        h += 50;
+        surfaceHolder.setFixedSize(w, h);
+        draw(surfaceHolder);
+    }
+
+    public void onZoomOutClicked(View view) {
+        w -= 50;
+        h -= 50;
+        surfaceHolder.setFixedSize(w, h);
+        draw(surfaceHolder);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bitmap != null){
+            bitmap.recycle();
+        }
+    }
+
 }

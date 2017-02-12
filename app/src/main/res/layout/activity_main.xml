@@ -10,8 +10,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.tct.zoomsurfaceview.MainActivity">
 
-    <com.tct.zoomsurfaceview.ZoomSurfaceView
+    <com.tct.zoomsurfaceview.CustomSurfaceView
         android:layout_width="match_parent"
         android:layout_height="256dp"
         android:id="@+id/zoom_surface_view"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/zoom_out_btn"
+        android:layout_alignParentBottom="true"
+        android:text="Zoom out"
+        android:onClick="onZoomOutClicked"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/zoom_in_btn"
+        android:layout_above="@+id/zoom_out_btn"
+        android:text="Zoom in"
+        android:onClick="onZoomInClicked"/>
 </RelativeLayout>

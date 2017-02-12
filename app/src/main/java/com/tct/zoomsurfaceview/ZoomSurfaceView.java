@@ -2,6 +2,8 @@ package com.tct.zoomsurfaceview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 
 /**
@@ -9,6 +11,8 @@ import android.view.SurfaceView;
  */
 
 public class ZoomSurfaceView extends SurfaceView{
+    private static final String TAG = "ZoomSurfaceView";
+
     public ZoomSurfaceView(Context context) {
         super(context);
     }
@@ -21,4 +25,11 @@ public class ZoomSurfaceView extends SurfaceView{
         super(context, attrs, defStyleAttr);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        Log.d(TAG, "onTouchEvent, event = "+event);
+
+        return true;
+    }
 }
